@@ -10,14 +10,11 @@ class MemoryCard extends React.Component {
         };
     }
     render() {
-        let memoryCardInnerClass = "MemoryCardInner";
-        if (this.state.isFlipped === true) {
-            const flippedClass = ' flipped'
-            memoryCardInnerClass = 'MemoryCardInner' + flippedClass;
-        }
+        const memoryCardInnerClass = "MemoryCardInner";
+        const flippedClass = 'flipped'
         return (
             <div className="MemoryCard" onClick={this.clickHandler}>
-                <div className={memoryCardInnerClass} id="MemoryCardInner">
+                <div className={this.state.isFlipped ? (memoryCardInnerClass + ' ' + flippedClass) : (memoryCardInnerClass)} id="MemoryCardInner">
                     <div className="MemoryCardBack">
                         <img src={digitalCrafts} alt="DigitalCrafts Logo"/>
                     </div>
