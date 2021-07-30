@@ -46,7 +46,8 @@ class App extends React.Component {
 
   resetGame = () => {
     this.setState({
-      matches: 0
+      matches: 0,
+      deck: generateDeck()
     })
   }
 
