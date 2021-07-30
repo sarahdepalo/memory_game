@@ -6,10 +6,12 @@ function generateDeck() {
   const symbols = ["🐶", "🦊", "🦑", "🐼", "🐧", "🦧", "🐢", "🐔"]
   let deck = [];
   for (let i = 0; i < 16; i++) {
+    
     let card = {
       isFlipped: false,
       symbol: symbols[i % 8]
     }
+
     deck.push(card);
   }
   shuffle(deck);
@@ -30,19 +32,32 @@ class App extends React.Component {
     super(props);
     this.state = {
       deck: generateDeck(),
-      pickedCards: []
+      pickedCards: [],
+      matches: 0
     }
+  }
+
+  checkWinner = () => {
+    if (this.state.matches > 7) {
+      return true;
+    }
+    return false;
+  }
+
+  resetGame = () => {
+    this.setState({
+      matches: 0
+    })
   }
 
   pickCard(cardIndex) {
     if (this.state.deck[cardIndex].isFlipped === true) {
       return
     }
+
     let cardToFlip = { ...this.state.deck[cardIndex] }
     cardToFlip.isFlipped = true;
-    //returns a new array with old contents and inserts cardIndex
     let newPickedCards = this.state.pickedCards.concat(cardIndex);
-    //This will also return a new/copied array
     let newDeck = this.state.deck.map((card, index) => {
       if (cardIndex === index) {
         return cardToFlip;
@@ -50,12 +65,17 @@ class App extends React.Component {
       return card
     });
 
+
     if (newPickedCards.length === 2) {
       let card1Index = newPickedCards[0]
       let card2Index = newPickedCards[1]
       if (newDeck[card1Index].symbol !== newDeck[card2Index].symbol) {
         setTimeout(this.unflipCards.bind(this, card1Index, card2Index), 1000)
         console.log('no match')
+      } else {
+        this.setState({
+          matches: this.state.matches + 1
+        })
       }
       newPickedCards = [];
     }
@@ -73,7 +93,6 @@ class App extends React.Component {
 
     newDeck[card1Index].isFlipped = false;
     newDeck[card2Index].isFlipped = false;
-
     this.setState({
       deck: newDeck
     })
@@ -85,16 +104,24 @@ class App extends React.Component {
         symbol={card.symbol}
         isFlipped={card.isFlipped}
         key={index}
-        //bind(this, index) is making sure that the function remembers which app instance it is
         pickCard={this.pickCard.bind(this, index)}
       />
     })
+
+    let winner = (this.checkWinner() === true ? 
+    (<>
+    <h2>You Win!</h2>
+    <button onClick={this.resetGame}>Play Again</button>
+    </>)
+    
+    : null)
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Memory Game</h1>
           <h3 className="Subtitle">Match Cards to Win</h3>
         </header>
+        {winner}
         <div>
           {cardsJSX.slice(0, 4)}
         </div>

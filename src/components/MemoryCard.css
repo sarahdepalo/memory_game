@@ -53,3 +53,20 @@ img {
   width: 100%;
   padding-top: 13px;
 }
+
+button {
+    padding: 8px 20px;
+    border: none;
+    margin-bottom: 10px;
+    background-color: #051491;
+    color: white;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+@media screen and (max-width: 960px) {
+    .MemoryCard {
+        margin: 10px;
+    }
+
+}
